@@ -22,3 +22,21 @@ compileJava {
   sourceCompatibility = '1.8'
 }
 
+jar {
+    from('./angularjs/app/') {
+        into "public"
+    }
+    
+    from {
+        (configurations.runtime).collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    
+    manifest {
+        attributes 'Implementation-Title': 'DD Demo',
+                  'Implementation-Version': version,
+                  'Main-Class': mainClassName,
+                  'Class-Path': configurations.compile.collect { it.getName() }.join(' ')
+    }
+}
